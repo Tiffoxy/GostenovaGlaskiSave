@@ -11,7 +11,8 @@ namespace WpfApp1
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.IO;
+
     public partial class Agent
     {
         public Agent()
@@ -85,6 +86,31 @@ namespace WpfApp1
         public string Email { get; set; }
         public string Phone { get; set; }
         public string Logo { get; set; }
+        public string AgentPhotoPath
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(Logo))
+                    return null;
+
+                // Извлекаем только имя файла (после последнего слеша)
+                string fileName = Logo;
+                int lastSlash = fileName.LastIndexOfAny(new[] { '\\', '/' });
+                if (lastSlash >= 0)
+                    fileName = fileName.Substring(lastSlash + 1);
+
+                // Убираем возможные ведущие слеши (на всякий случай)
+                fileName = fileName.TrimStart('\\', '/');
+
+                // Строим путь к папке imgs/agents
+                string fullPath = Path.Combine(
+                    AppDomain.CurrentDomain.BaseDirectory,
+                    "Imgs", "agents", fileName);
+
+                // Если файл существует – возвращаем путь, иначе null
+                return File.Exists(fullPath) ? fullPath : null;
+            }
+        }
         public string Address { get; set; }
         public int Priority { get; set; }
         public string DirectorName { get; set; }

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Navigation;
 
 namespace WpfApp1
 {
@@ -19,6 +21,10 @@ namespace WpfApp1
             ComboType.SelectedIndex = 0;
             ComboSort.SelectedIndex = 0;
             UpdateService();
+        }
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            UpdateService(); // обновляем данные при каждом появлении страницы
         }
         int CountRecords;
         int CountPage;
@@ -186,7 +192,11 @@ namespace WpfApp1
 
             
         }
-
+        public void RefreshAgents()
+        {
+            // Просто заново вызываем UpdateService для обновления данных
+            UpdateService();
+        }
         private void TBSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateService();
@@ -215,6 +225,16 @@ namespace WpfApp1
         private void RightDirBtn_Clik(object sender, System.Windows.RoutedEventArgs e)
         {
             ChangePage(2,null);
+        }
+
+        private void AddAgent_Click(object sender, RoutedEventArgs e)
+        {
+            Manager.MainFrame.Navigate(new AddAgentPage(null));
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            Manager.MainFrame.Navigate(new AddAgentPage(AgentsListView.SelectedItem as Agent));
         }
     }
 }
